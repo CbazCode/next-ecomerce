@@ -9,7 +9,7 @@ const DetailProduct = (props) => {
     const [tab, setTab] = useState(0)
 
     const { state, dispatch } = useContext(DataContext)
-    // const { cart } = state
+    const { cart } = state
 
     const isActive = (index) => {
         if(tab === index) return " active";
@@ -59,7 +59,7 @@ const DetailProduct = (props) => {
                 </div>
 
                 <button type="button" className="btn btn-dark d-block my-3 px-5"
-                /* onClick={() => dispatch(addToCart(product, cart))} */ >
+                 onClick={() => dispatch(addToCart(product, cart))}  >
                     Buy
                 </button>
 
