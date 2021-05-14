@@ -1,4 +1,5 @@
 import React from 'react'
+import Modal from './Modal'
 import NavBar from './NavBar'
 import Notify from './Notify'
 
@@ -7,6 +8,7 @@ function Layout({children}) {
         <div className="container">
             <NavBar/>
             <Notify/>
+            <Modal/>
             {children}
         </div>
     )
