@@ -4,6 +4,9 @@ module.exports = {
         "MONGODB_URL" : "mongodb+srv://test_user:hbN0W0ugSBSk1pHi@cluster0.qogmr.mongodb.net/next-ecommerce?retryWrites=true&w=majority",
         "ACCESS_TOKEN_SECRET": "SECRET00_ACCESS",
         "REFRESH_TOKEN_SECRET": "SECRET00_REFRESH",
-        "PAYPAL_CLIENT_ID":"AcN4yjwaMsmwVjKa3EEc_8yqx-zUU8iixPHgdFlBgL0iu-MDAKfOpZxJzcBiy7bVTgParND6cnbpl27h"
+        "PAYPAL_CLIENT_ID":"AcN4yjwaMsmwVjKa3EEc_8yqx-zUU8iixPHgdFlBgL0iu-MDAKfOpZxJzcBiy7bVTgParND6cnbpl27h",
+        "CLOUD_UPDATE_PRESET": "next_ecomerce",
+        "CLOUD_NAME": "cbazcloud",
+        "CLOUD_API":"https://api.cloudinary.com/v1_1/cbazcloud/image/upload"
     }
 }

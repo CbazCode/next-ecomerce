@@ -9,13 +9,12 @@ import PaypalBtn from "../components/PaypalBtn";
 
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext);
-  const { cart, auth/* , orders */ } = state;
+  const { cart, auth , orders } = state;
 
   const [total, setTotal] = useState(0);
 
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
-  const [payment, setPayment] = useState(false)
 
   const [callback, setCallback] = useState(false);
   const router = useRouter();
@@ -67,44 +66,44 @@ const Cart = () => {
         type: "NOTIFY",
         payload: { error: "Please add your address and mobile." },
       });
-    setPayment(true)
 
-    // let newCart = [];
-    // for (const item of cart) {
-    //   const res = await getData(`product/${item._id}`);
-    //   if (res.product.inStock - item.quantity >= 0) {
-    //     newCart.push(item);
-    //   }
-    // }
+    // Verify the stock if there are changes in DB
+    let newCart = [];
+    for (const item of cart) {
+      const res = await getData(`product/${item._id}`);
+      if (res.product.inStock - item.quantity >= 0) {
+        newCart.push(item);
+      }
+    }
 
-    // if (newCart.length < cart.length) {
-    //   setCallback(!callback);
-    //   return dispatch({
-    //     type: "NOTIFY",
-    //     payload: {
-    //       error: "The product is out of stock or the quantity is insufficient.",
-    //     },
-    //   });
-    // }
+    if (newCart.length < cart.length) {
+      setCallback(!callback);
+      return dispatch({
+        type: "NOTIFY",
+        payload: {
+          error: "The product is out of stock or the quantity is insufficient.",
+        },
+      });
+    }
 
-    // dispatch({ type: "NOTIFY", payload: { loading: true } });
+    dispatch({ type: "NOTIFY", payload: { loading: true } });
 
-    // postData("order", { address, mobile, cart, total }, auth.token).then(
-    //   (res) => {
-    //     if (res.err)
-    //       return dispatch({ type: "NOTIFY", payload: { error: res.err } });
+    postData("order", { address, mobile, cart, total }, auth.token).then(
+      (res) => {
+        if (res.err)
+          return dispatch({ type: "NOTIFY", payload: { error: res.err } });
 
-    //     dispatch({ type: "ADD_CART", payload: [] });
+        dispatch({ type: "ADD_CART", payload: [] });
 
-    //     const newOrder = {
-    //       ...res.newOrder,
-    //       user: auth.user,
-    //     };
-    //     dispatch({ type: "ADD_ORDERS", payload: [...orders, newOrder] });
-    //     dispatch({ type: "NOTIFY", payload: { success: res.msg } });
-    //     return router.push(`/order/${res.newOrder._id}`);
-    //   }
-    // );
+        const newOrder = {
+          ...res.newOrder,
+          user: auth.user,
+        };
+        dispatch({ type: "ADD_ORDERS", payload: [...orders, newOrder] });
+        dispatch({ type: "NOTIFY", payload: { success: res.msg } });
+        return router.push(`/order/${res.newOrder._id}`);
+      }
+    );
   };
 
   if (cart.length === 0)
@@ -164,16 +163,11 @@ const Cart = () => {
         <h3>
           Total: <span className="text-danger">${total}</span>
         </h3>
-        {
-
-          payment ?
-          <PaypalBtn/>
-          : <Link href={auth.user ? "#!" : "/signin"}>
-              <a className="btn btn-dark my-2" onClick={handlePayment}>
+        <Link href={auth.user ? "#!" : "/signin"}>
+            <a className="btn btn-dark my-2" onClick={handlePayment}>
                 Proceed with payment
-              </a>
-            </Link>
-        }
+            </a>
+         </Link>
 
       </div>
     </div>
