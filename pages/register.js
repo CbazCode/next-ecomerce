@@ -12,6 +12,7 @@ const Register = () => {
     const { name, email, password, cf_password } = userData
 
     const {state, dispatch} = useContext(DataContext)
+    const { auth } = state
 
     const router = useRouter()
 
