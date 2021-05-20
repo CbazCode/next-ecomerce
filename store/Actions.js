@@ -3,7 +3,8 @@ export const ACTIONS = {
     AUTH: 'AUTH',
     ADD_CART: 'ADD_CART',
     ADD_MODAL: 'ADD_MODAL',
-    ADD_ORDERS: 'ADD_ORDERS'
+    ADD_ORDERS: 'ADD_ORDERS',
+    ADD_USERS: 'ADD_USERS'
 }
 
 //Actions creators
