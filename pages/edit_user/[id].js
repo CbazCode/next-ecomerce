@@ -12,20 +12,26 @@ const EditUser = () => {
 
     const {state, dispatch} = useContext(DataContext)
     const {auth, users} = state
+    const [exist, setExist] = useState(false)
 
     const [editUser, setEditUser] = useState([])
     const [checkAdmin, setCheckAdmin] = useState(false)
     const [num, setNum] = useState(0)
 
+   
     useEffect(() => {
         users.forEach(user => {
             if(user._id === id){
+                setExist(true)
                 setEditUser(user)
                 setCheckAdmin(user.role === 'admin' ? true : false)
             }
         })
     },[users])
 
+    if(!exist){
+        return <h3>User Not Found</h3>
+    }
     const handleCheck = () => {
         setCheckAdmin(!checkAdmin)
         setNum(num + 1)
