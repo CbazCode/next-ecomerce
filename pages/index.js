@@ -4,16 +4,28 @@ import {DataContext} from '../store/GlobalState'
 
 import { getData } from '../utils/fetchData'
 import ProductItem from '../components/product/ProductItem'
-// import filterSearch from '../utils/filterSearch'
+import filterSearch from '../utils/filterSearch'
 import {useRouter} from 'next/router'
 // import Filter from '../components/Filter'
 
 const Home = (props) => {
   const [products, setProducts] = useState(props.products)
+  
   const [isCheck, setIsCheck] = useState(false)
-
+  const [page, setPage] = useState(1)
+  const router = useRouter()
+  
   const {state, dispatch} = useContext(DataContext)
   const {auth} = state
+
+
+  useEffect(() => {
+    setProducts(props.products)
+  },[props.products])
+
+  useEffect(() => {
+    if(Object.keys(router.query).length === 0) setPage(1)
+  },[router.query])
 
   const handleCheck = (id) => {
     products.forEach(product => {
@@ -42,6 +54,11 @@ const Home = (props) => {
     })
 
     dispatch({type: 'ADD_MODAL', payload: deleteArr})
+  }
+
+  const handleLoadmore = () => {
+    setPage(page + 1)
+    filterSearch({router, page: page + 1})
   }
 
   return (
@@ -73,21 +90,28 @@ const Home = (props) => {
           ))
         }
       </div>
+        {
+        props.result < page * 6 ? ""
+        : <button className="btn btn-outline-info d-block mx-auto mb-4"
+        onClick={handleLoadmore}>
+          Load more
+        </button>
+      }
     </>
   )
 }
 
 export async function getServerSideProps({query}) {
-  // const page = query.page || 1
-  // const category = query.category || 'all'
-  // const sort = query.sort || ''
-  // const search = query.search || 'all'
+  const page = query.page || 1
+  const category = query.category || 'all'
+  const sort = query.sort || ''
+  const search = query.search || 'all'
 
-  // const res = await getData(
-  //   `product?limit=${page * 6}&category=${category}&sort=${sort}&title=${search}`
-  // )
+  const res = await getData(
+    `product?limit=${page * 6}&category=${category}&sort=${sort}&title=${search}`
+  )
 
-  const res = await getData('product')
+  // const res = await getData('product')
   // server side rendering
   return {
     props: {
